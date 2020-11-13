@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Socket demo</title>
+    <script type="text/javascript" src="./socket.io.js"></script>
+    <script>
+        var socket = io();
+        socket.on('connect', () => {
+            console.log('connected');
+            socket.on('testPong', (message) => {
+                console.log(message);
+                setTimeout(() => {
+                    emitPingMessage();
+                }, 3000);
+            });
+            emitPingMessage();
+        });
+        socket.on('disconnect', () => {
+            console.log('dis-connected');
+        });
+        function emitPingMessage() {
+            socket.emit('testPing', {
+                type: 'keep-alive',
+                message: 'ping',
+                timestamp: new Date().toISOString()
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Socket.io demo</h1>
+</body>
+</html>
